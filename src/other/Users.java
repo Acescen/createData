@@ -6,6 +6,7 @@ import java.util.*;
 
 import static other.EcStatic.*;
 import static other.RandomGenerator.getRandom;
+import static util.Excel.addAppWebsiteToList;
 import static util.Excel.addDataToList;
 
 /**
@@ -29,25 +30,31 @@ public class Users {
 
     //新增用户数（当前月新增交易数*比例系数变量d(d>1),注明参数可修改就行）
     public static int[][] newUsers = new int[4][month.length];
+    public static int[][] newUsersAppWebsite = new int[3][month.length];
 
     //累计注册用户数（上月老用户加上本月新用户）
     public static int[][] allUsers = new int[4][month.length];
 
     //月活用户（老用户的交易+新用户交易）*比例系数d(d>1)
     public static int[][] mauUsers = new int[4][month.length];
+    public static int[][] mauUsersAppWebsite = new int[3][month.length];
 
     //日活用户(月活人数/天数)
     public static int[][] dayUsers = new int[4][month.length];
+    public static int[][] dayUsersAppWebsite = new int[3][month.length];
 
     //每日登陆时长（定义一组基础数，然后成比例随机产生）
     public static int[] baseNum = {13, 20};
     public static double[][] dayHours = new double[4][month.length];
+    public static double[][] dayHoursAppWebsite = new double[3][month.length];
 
     //交易用户数（老交易+新交易）
     public static int[] tradeUsers = new int[month.length];
+    public static int[][] tradeUsersAppWebsite = new int[3][month.length];
 
     //交易频次（当月产生的交易次数）（交易次数表中按列相加）
     public static int[] tradeNum = new int[month.length];
+    public static int[][] tradeNumAppWebsite = new int[3][month.length];
 
     public static void readData(int[][] a) {
         for (int i = 0; i < 4; i++) {
@@ -59,7 +66,6 @@ public class Users {
     }
 
     public static int[][] getNewUsers() {
-        //getPeopleNumber();
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < month.length; j++) {
@@ -72,15 +78,14 @@ public class Users {
     }
 
     public static int[][] getAllUsers() {
-        //getPeopleNumber();
         getNewUsers();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < month.length; j++) {
                 if (j == 0) {
-                    allUsers[i][j] = (int) ((peopleNum[0][i][0][0]+peopleNum[1][i][0][0])*D2);
+                    allUsers[i][j] = (int) ((peopleNum[0][i][0][0] + peopleNum[1][i][0][0]) * D2);
                     continue;
                 }
-                allUsers[i][j] =(allUsers[i][j - 1] + newUsers[i][j]);
+                allUsers[i][j] = (allUsers[i][j - 1] + newUsers[i][j]);
             }
         }
         //System.out.println("累计注册用户数：");
@@ -90,14 +95,13 @@ public class Users {
     }
 
     public static int[][] getMauUsers() {
-        //getPeopleNumber();
-    	//修正月活用户与累计注册用户的比例
-        for (int i=0;i<4;i++){
-            for (int j=0;j<month.length;j++){
-            	 //float ratio = 0.25f + new Random().nextFloat() * (0.35f-0.25f);
-            	double ratio = 0.25 + getRandom(EcStatic.randomIndex) * (0.35-0.25);
-            	EcStatic.randomIndex++;
-            	 mauUsers[i][j]=(int)((allUsers[i][j])*(ratio));
+        //修正月活用户与累计注册用户的比例
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < month.length; j++) {
+                //float ratio = 0.25f + new Random().nextFloat() * (0.35f-0.25f);
+                double ratio = 0.25 + getRandom(EcStatic.randomIndex) * (0.35 - 0.25);
+                EcStatic.randomIndex++;
+                mauUsers[i][j] = (int) ((allUsers[i][j]) * (ratio));
                /* for (int k=0;k<month.length;k++){
                     for (int m=0;m<2;m++){
                     	
@@ -159,12 +163,11 @@ public class Users {
     }
 
     public static int[] getTradeUsers() {
-        //getPeopleNumber();
         for (int j = 0; j < month.length; j++) {
             for (int i = 0; i < 4; i++) {
                 for (int k = 0; k < month.length; k++) {
-                    for (int m=0;m<2;m++){
-                        tradeUsers[j]+=peopleNum[m][i][k][j];
+                    for (int m = 0; m < 2; m++) {
+                        tradeUsers[j] += peopleNum[m][i][k][j];
                     }
                 }
             }
@@ -178,12 +181,11 @@ public class Users {
     }
 
     public static int[] getTradeNum() {
-        //getCount();
         for (int j = 0; j < month.length; j++) {
             for (int i = 0; i < 4; i++) {
                 for (int k = 0; k < month.length; k++) {
-                    for (int m=0;m<2;m++){
-                        tradeNum[j]+=orderNum[m][i][k][j];
+                    for (int m = 0; m < 2; m++) {
+                        tradeNum[j] += orderNum[m][i][k][j];
                     }
                 }
             }
@@ -205,6 +207,7 @@ public class Users {
         }
         return b;
     }
+
     public static double[] getTotal(double[][] num) {
         double b[] = new double[month.length];
         for (int i = 0; i < month.length; i++) {
@@ -216,6 +219,30 @@ public class Users {
     }
 
 
+    public static int[][] getAppWebsite(int[] total) {
+        int[][] appWebsite = new int[3][month.length];
+        for (int i = 0; i < month.length; i++) {
+            double ratio = 0.2 + getRandom(EcStatic.randomIndex) * (0.3 - 0.2);
+            EcStatic.randomIndex++;
+            appWebsite[0][i] = total[i];
+            appWebsite[1][i] = (int) (total[i] * ratio);
+            appWebsite[2][i] = total[i] - appWebsite[1][i];
+        }
+        return appWebsite;
+    }
+
+    public static double[][] getAppWebsite(double[] total) {
+        double[][] appWebsite = new double[3][month.length];
+        for (int i = 0; i < month.length; i++) {
+            double ratio = 0.2 + getRandom(EcStatic.randomIndex) * (0.3 - 0.2);
+            EcStatic.randomIndex++;
+            appWebsite[0][i] = total[i];
+            appWebsite[1][i] = (total[i] * ratio);
+            appWebsite[2][i] = total[i] - appWebsite[1][i];
+        }
+        return appWebsite;
+    }
+
 
     public static List<Map> getUsersList() throws ParseException {
         List<Map> listUsers = new ArrayList<Map>();
@@ -223,44 +250,50 @@ public class Users {
         getNewUsers();
         int newUsersTotal[] = getTotal(newUsers);
         addDataToList("新增注册用户", newUsers, newUsersTotal, listUsers);
+        newUsersAppWebsite = getAppWebsite(newUsersTotal);
+        addAppWebsiteToList(newUsersAppWebsite, listUsers);
 
         //获取累计注册用户
         getAllUsers();
-        int allUsersTotal[] =new int[month.length];
-        for (int i=0;i<month.length;i++){
-            if (i==0){
-                allUsersTotal[i]=(allUsers[0][0]+allUsers[1][0]+allUsers[2][0]+allUsers[3][0]);
-           continue;
+        int allUsersTotal[] = new int[month.length];
+        for (int i = 0; i < month.length; i++) {
+            if (i == 0) {
+                allUsersTotal[i] = (allUsers[0][0] + allUsers[1][0] + allUsers[2][0] + allUsers[3][0]);
+                continue;
             }
-            allUsersTotal[i]= (allUsersTotal[i-1]+newUsersTotal[i]);
+            allUsersTotal[i] = (allUsersTotal[i - 1] + newUsersTotal[i]);
         }
         addDataToList("累计注册用户", allUsers, allUsersTotal, listUsers);
+
         //月活用户
         getMauUsers();
         int mauUsersTotal[] = getTotal(mauUsers);
         tradeUsers = getTradeUsers();
         //修正月活用户数量 大于交易用户的情况 2019-4-11
-        for(int i=0; i<mauUsersTotal.length && i<tradeUsers.length; i++) {
-        	double ratio = ((double)tradeUsers[i]) / ((double)mauUsersTotal[i]);
-        	if(ratio<0.15 || ratio>0.8) {
-        		//float rnd = 0.45f + new Random().nextFloat() * (0.55f-0.45f);
-        		double rnd = 0.45 + getRandom(EcStatic.randomIndex) * (0.55-0.45);
-        		EcStatic.randomIndex++;
-        		mauUsersTotal[i] = (int)(tradeUsers[i] / rnd);
-        		mauUsers[0][i] = (int)(mauUsersTotal[i] * EcStatic.us[0]);
-        		mauUsers[1][i] = (int)(mauUsersTotal[i] * EcStatic.uk[0]);
-        		mauUsers[2][i] = (int)(mauUsersTotal[i] * EcStatic.sa[0]);
-        		mauUsers[3][i] = mauUsersTotal[i] - mauUsers[0][i] - mauUsers[1][i] - mauUsers[2][i];
-        		
-        	}
+        for (int i = 0; i < mauUsersTotal.length && i < tradeUsers.length; i++) {
+            double ratio = ((double) tradeUsers[i]) / ((double) mauUsersTotal[i]);
+            if (ratio < 0.15 || ratio > 0.8) {
+                //float rnd = 0.45f + new Random().nextFloat() * (0.55f-0.45f);
+                double rnd = 0.45 + getRandom(EcStatic.randomIndex) * (0.55 - 0.45);
+                EcStatic.randomIndex++;
+                mauUsersTotal[i] = (int) (tradeUsers[i] / rnd);
+                mauUsers[0][i] = (int) (mauUsersTotal[i] * EcStatic.us[0]);
+                mauUsers[1][i] = (int) (mauUsersTotal[i] * EcStatic.uk[0]);
+                mauUsers[2][i] = (int) (mauUsersTotal[i] * EcStatic.sa[0]);
+                mauUsers[3][i] = mauUsersTotal[i] - mauUsers[0][i] - mauUsers[1][i] - mauUsers[2][i];
+
+            }
         }
         addDataToList("月活用户", mauUsers, mauUsersTotal, listUsers);
-       
+        mauUsersAppWebsite = getAppWebsite(mauUsersTotal);
+        addAppWebsiteToList(mauUsersAppWebsite, listUsers);
+
         //日活用户
         getDayUsers();
         int dayUsersTotal[] = getTotal(dayUsers);
         addDataToList("日活用户", dayUsers, dayUsersTotal, listUsers);
-
+        dayUsersAppWebsite = getAppWebsite(dayUsersTotal);
+        addAppWebsiteToList(dayUsersAppWebsite, listUsers);
 
 
         double dayHoursTotal[] = new double[month.length];
@@ -271,68 +304,32 @@ public class Users {
             }
         }
         double dayHoursAverage[] = new double[month.length];
-        for (int i=0;i<month.length;i++){
-            dayHoursAverage[i]=dayHoursTotal[i]/4.00;
+        for (int i = 0; i < month.length; i++) {
+            dayHoursAverage[i] = dayHoursTotal[i] / 4.00;
         }
 
+        addDataToList("每日登录时长", dayHours, dayHoursAverage, listUsers);
+        dayHoursAppWebsite = getAppWebsite(dayHoursTotal);
+        addAppWebsiteToList(dayHoursAppWebsite, listUsers);
 
-        for (int i = 0; i < 5; i++) {
-
-            Map<String, Object> map = new HashMap<String, Object>();
-            if (i == 0) {
-                map.put("数据类型", "");
-                map.put("区域", "average");
-                for (int j = 0; j < month.length; j++) {
-                    map.put(month[j], dayHoursAverage[j]);
-                }
-                listUsers.add(map);
-                continue;
-            } else if (i == 2) {
-                map.put("数据类型", "每日登录时长");
-                map.put("区域", country[i - 1]);
-            } else {
-                map.put("数据类型", "");
-                map.put("区域", country[i - 1]);
-            }
-
-            for (int j = 0; j < month.length; j++) {
-                map.put(month[j],dayHours[i - 1][j]);
-            }
-            listUsers.add(map);
-        }
-        Map<String, Object> mapNull = new HashMap<String, Object>();
-        listUsers.add(mapNull);
 
         //获取交易用户数
-       // tradeUsers = getTradeUsers();
-       
-        Map<String, Object> mapTdUsers = new HashMap<String, Object>();
-
-        mapTdUsers.put("数据类型", "交易用户数");
-        mapTdUsers.put("区域", "total");
-        for (int j = 0; j < month.length; j++) {
-            mapTdUsers.put(month[j], tradeUsers[j]);
-        }
-        listUsers.add(mapTdUsers);
-        listUsers.add(mapNull);
+        //tradeUsers = getTradeUsers();
+        tradeUsersAppWebsite = getAppWebsite(tradeUsers);
+        addAppWebsiteToList("交易用户数", tradeUsersAppWebsite, listUsers);
 
 
         //获取交易频次
         tradeNum = getTradeNum();
-        Map<String, Object> mapTdNum = new HashMap<String, Object>();
-
-        mapTdNum.put("数据类型", "交易频次");
-        mapTdNum.put("区域", "total");
-        for (int j = 0; j < month.length; j++) {
-            mapTdNum.put(month[j], tradeNum[j]);
-        }
-        listUsers.add(mapTdNum);
-        listUsers.add(mapNull);
+        tradeNumAppWebsite = getAppWebsite(tradeNum);
+        addAppWebsiteToList("交易频次", tradeNumAppWebsite, listUsers);
 
 
         return listUsers;
     }
 
+
     public static void main(String[] args) {
+
     }
 }

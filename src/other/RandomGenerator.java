@@ -19,6 +19,7 @@ import static other.EcStatic.reg;
 public class RandomGenerator {
     public static double[] Randoms;
     public static Random random;
+
     public static void initMonth() throws IOException {
         File f = new File("month.txt");
         if (!f.exists()) {
@@ -55,7 +56,7 @@ public class RandomGenerator {
 
         reg = new int[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            reg[i] =Integer.parseInt(list.get(i));
+            reg[i] = Integer.parseInt(list.get(i));
         }
         bf.close();
         fileReader.close();
@@ -74,7 +75,7 @@ public class RandomGenerator {
         while ((str = bf.readLine()) != null) {
             list.add(str);
         }
-        Randoms = new double[month.length*500];
+        Randoms = new double[month.length * 500];
         for (int i = 0; i < list.size(); i++) {
             String s = list.get(i);
             Randoms[i] = Double.parseDouble(s);
@@ -91,8 +92,8 @@ public class RandomGenerator {
             //System.out.println(index + "  " + Randoms[index]);
         }
         return Randoms[index];
-    	
-    	
+
+
     }
 
 

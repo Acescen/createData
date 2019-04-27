@@ -233,7 +233,8 @@ public class Excel {
         List<Map> listUsers 需要添加的集合
     */
     public static void addDataToList(String dataType, int[][] data, int[] totalData, List<Map> listUsers) {
-        for (int i = 0; i < 5; i++) {
+        if ("累计注册用户".equals(dataType)){
+            for (int i = 0; i < 5; i++) {
             //第二行
             Map<String, Object> map = new HashMap<String, Object>();
             if (i == 0) {
@@ -257,8 +258,41 @@ public class Excel {
             }
             listUsers.add(map);
         }
-        Map<String, Object> map1 = new HashMap<String, Object>();
-        listUsers.add(map1);
+            Map<String, Object> map1 = new HashMap<String, Object>();
+            listUsers.add(map1);
+
+        }else {
+            for (int i = 0; i < 5; i++) {
+                //第二行
+                Map<String, Object> map = new HashMap<String, Object>();
+                if (i == 0) {
+                    map.put("数据类型", "");
+                    if ("每日登录时长".equals(dataType)){
+                        map.put("区域", "average");
+
+                    }else{
+                        map.put("区域", "total");
+
+                    }
+                    for (int j = 0; j < month.length; j++) {
+                        map.put(month[j], totalData[j]);
+                    }
+                    listUsers.add(map);
+                    continue;
+                } else {
+                    map.put("数据类型", "");
+                    map.put("区域", country[i - 1]);
+                }
+
+                for (int j = 0; j < month.length; j++) {
+                    map.put(month[j], data[i - 1][j]);
+                }
+                listUsers.add(map);
+            }
+            Map<String, Object> map1 = new HashMap<String, Object>();
+            map1.put("数据类型", dataType);
+            listUsers.add(map1);
+        }
 
     }
 
@@ -274,9 +308,6 @@ public class Excel {
                 }
                 listUsers.add(map);
                 continue;
-            } else if (i == 2) {
-                map.put("数据类型", dataType);
-                map.put("区域", country[i - 1]);
             } else {
                 map.put("数据类型", "");
                 map.put("区域", country[i - 1]);
@@ -288,8 +319,84 @@ public class Excel {
             listUsers.add(map);
         }
         Map<String, Object> map1 = new HashMap<String, Object>();
+        map1.put("数据类型", dataType);
         listUsers.add(map1);
 
+    }
+
+    public static void addAppWebsiteToList(double[][] data, List<Map> listUsers) {
+        for (int i = 0; i < 3; i++) {
+            //第二行
+            Map<String, Object> map = new HashMap<String, Object>();
+            if (i == 0) {
+                map.put("数据类型", "");
+                map.put("区域", "total");
+            } else if (i == 1){
+                map.put("数据类型", "");
+                map.put("区域", "App");
+            }else{
+                map.put("数据类型", "");
+                map.put("区域", "网站");
+            }
+
+            for (int j = 0; j < month.length; j++) {
+                map.put(month[j], data[i][j]);
+            }
+            listUsers.add(map);
+        }
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        listUsers.add(map1);
+        listUsers.add(map1);
+
+    }
+    public static void addAppWebsiteToList(int[][] data, List<Map> listUsers) {
+        for (int i = 0; i < 3; i++) {
+            //第二行
+            Map<String, Object> map = new HashMap<String, Object>();
+            if (i == 0) {
+                map.put("数据类型", "");
+                map.put("区域", "total");
+            } else if (i == 1){
+                map.put("数据类型", "");
+                map.put("区域", "App");
+            }else{
+                map.put("数据类型", "");
+                map.put("区域", "网站");
+            }
+
+            for (int j = 0; j < month.length; j++) {
+                map.put(month[j], data[i][j]);
+            }
+            listUsers.add(map);
+        }
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        listUsers.add(map1);
+        listUsers.add(map1);
+    }
+
+    public static void addAppWebsiteToList(String dataType,int[][] data, List<Map> listUsers) {
+        for (int i = 0; i < 3; i++) {
+            //第二行
+            Map<String, Object> map = new HashMap<String, Object>();
+            if (i == 0) {
+                map.put("数据类型", "");
+                map.put("区域", "total");
+            } else if (i == 1){
+                map.put("数据类型", dataType);
+                map.put("区域", "App");
+            }else{
+                map.put("数据类型", "");
+                map.put("区域", "网站");
+            }
+
+            for (int j = 0; j < month.length; j++) {
+                map.put(month[j], data[i][j]);
+            }
+            listUsers.add(map);
+        }
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        listUsers.add(map1);
+        listUsers.add(map1);
     }
 
     //生成用户数据集excel表格

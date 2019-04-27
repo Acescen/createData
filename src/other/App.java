@@ -6,6 +6,7 @@ import static other.RandomGenerator.init;
 import static other.RandomGenerator.writeToTxt;
 import static other.Users.getDayHours;
 import static util.Excel.*;
+
 /**
  * Hello world!
  */
@@ -19,9 +20,8 @@ public class App {
         getAmount();
         //获取每日登录时长
         getDayHours();
-        
-        
-        
+
+
         //创建excel表
         //文件位置：E:/运营数据包.xls
         createThreeSheet();
