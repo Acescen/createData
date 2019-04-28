@@ -30,7 +30,6 @@ public class TradeData {
     public static int[][] totalTradeNumAppWebsite = new int[3][month.length];
 
 
-
     //电商模块
     //电商交易金额---区分新老用户--所有区域总和
     public static double[][] onlineRetAmount = new double[4][month.length];
@@ -48,7 +47,6 @@ public class TradeData {
     public static int[][] onlineRetTrNumAppWebsite = new int[3][month.length];
 
 
-
     //金融模块
     //金融交易金额---区分新老用户--所有区域总和
     public static double[][] FinanceAmount = new double[4][month.length];
@@ -64,7 +62,6 @@ public class TradeData {
     public static int[][] FinanceTrNum = new int[4][month.length];
     public static int toFinanceTrNum[] = new int[month.length];
     public static int[][] FinanceTrNumAppWebsite = new int[3][month.length];
-
 
 
     public static double[][] getTotalAmount() {
@@ -243,8 +240,8 @@ public class TradeData {
         getOnlineRetTrPeople();
         toOnlineRetTrPeople = getTotal(onlineRetTrPeople);
         addDataToList("交易人数", onlineRetTrPeople, toOnlineRetTrPeople, listTrade);
-        onlineRetTrPeopleAppWebsite = getAppWebsite(toOnlineRetTrPeople);
-        addAppWebsiteToList(onlineRetTrPeopleAppWebsite, listTrade);
+        //onlineRetTrPeopleAppWebsite = getAppWebsite(toOnlineRetTrPeople);
+        //addAppWebsiteToList(onlineRetTrPeopleAppWebsite, listTrade);
         //交易笔数
         getOnlineRetTrNum();
         toOnlineRetTrNum = getTotal(onlineRetTrNum);
@@ -269,8 +266,8 @@ public class TradeData {
         getFinanceTrPeople();
         toFinanceTrPeople = getTotal(FinanceTrPeople);
         addDataToList("交易人数", FinanceTrPeople, toFinanceTrPeople, listTrade);
-        FinanceTrPeopleAppWebsite = getAppWebsite(toFinanceTrPeople);
-        addAppWebsiteToList(FinanceTrPeopleAppWebsite, listTrade);
+        //FinanceTrPeopleAppWebsite = getAppWebsite(toFinanceTrPeople);
+        //addAppWebsiteToList(FinanceTrPeopleAppWebsite, listTrade);
         //交易笔数
         getFinanceTrNum();
         toFinanceTrNum = getTotal(FinanceTrNum);
