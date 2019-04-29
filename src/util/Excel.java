@@ -324,13 +324,13 @@ public class Excel {
 
     }
 
-    public static void addAppWebsiteToList(double[][] data, List<Map> listUsers) {
+    public static void addAppWebsiteToList(String dataType,double[][] data, List<Map> listUsers) {
         for (int i = 0; i < 3; i++) {
             //第二行
             Map<String, Object> map = new HashMap<String, Object>();
             if (i == 0) {
                 map.put("数据类型", "");
-                map.put("区域", "total");
+                map.put("区域", dataType);
             } else if (i == 1) {
                 map.put("数据类型", "");
                 map.put("区域", "App");

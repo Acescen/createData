@@ -214,7 +214,7 @@ public class TradeData {
         toTotalAmount = getTotal(totalAmount);
         addDataToList("交易总金额", totalAmount, toTotalAmount, listTrade);
         totalAmountAppWebsite = getAppWebsite(toTotalAmount);
-        addAppWebsiteToList(totalAmountAppWebsite, listTrade);
+        addAppWebsiteToList("total",totalAmountAppWebsite, listTrade);
 
         //获取交易总笔数
         getTotalTradeNum();
@@ -235,7 +235,7 @@ public class TradeData {
         toOnlineRetAmount = getTotal(onlineRetAmount);
         addDataToList("交易金额", onlineRetAmount, toOnlineRetAmount, listTrade);
         onlineRetAmountAppWebsite = getAppWebsite(toOnlineRetAmount);
-        addAppWebsiteToList(onlineRetAmountAppWebsite, listTrade);
+        addAppWebsiteToList("total",onlineRetAmountAppWebsite, listTrade);
         //交易人数
         getOnlineRetTrPeople();
         toOnlineRetTrPeople = getTotal(onlineRetTrPeople);
@@ -261,7 +261,7 @@ public class TradeData {
         toFinanceAmount = getTotal(FinanceAmount);
         addDataToList("交易金额", FinanceAmount, toFinanceAmount, listTrade);
         FinanceAmountAppWebsite = getAppWebsite(toFinanceAmount);
-        addAppWebsiteToList(FinanceAmountAppWebsite, listTrade);
+        addAppWebsiteToList("total",FinanceAmountAppWebsite, listTrade);
         //交易人数
         getFinanceTrPeople();
         toFinanceTrPeople = getTotal(FinanceTrPeople);

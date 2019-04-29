@@ -8,6 +8,7 @@ import static other.EcStatic.*;
 import static other.RandomGenerator.getRandom;
 import static util.Excel.addAppWebsiteToList;
 import static util.Excel.addDataToList;
+import static util.Getproperties.getValue;
 
 /**
  * @Author: jurui
@@ -222,7 +223,10 @@ public class Users {
     public static int[][] getAppWebsite(int[] total) {
         int[][] appWebsite = new int[3][month.length];
         for (int i = 0; i < month.length; i++) {
-            double ratio = 0.2 + getRandom(EcStatic.randomIndex) * (0.3 - 0.2);
+            double ratio = Double.parseDouble(getValue("lowWebsite"))
+                    + getRandom(EcStatic.randomIndex) * (
+                      (Double.parseDouble(getValue("highWebsite"))) - (Double.parseDouble(getValue("lowWebsite")))
+            );
             EcStatic.randomIndex++;
             appWebsite[0][i] = total[i];
             appWebsite[1][i] = (int) (total[i] * ratio);
@@ -234,7 +238,10 @@ public class Users {
     public static double[][] getAppWebsite(double[] total) {
         double[][] appWebsite = new double[3][month.length];
         for (int i = 0; i < month.length; i++) {
-            double ratio = 0.2 + getRandom(EcStatic.randomIndex) * (0.3 - 0.2);
+            double ratio = Double.parseDouble(getValue("lowWebsite"))
+                    + getRandom(EcStatic.randomIndex) * (
+                    (Double.parseDouble(getValue("highWebsite"))) - (Double.parseDouble(getValue("lowWebsite")))
+            );
             EcStatic.randomIndex++;
             appWebsite[0][i] = total[i];
             appWebsite[1][i] = (total[i] * ratio);
@@ -309,8 +316,8 @@ public class Users {
         }
 
         addDataToList("每日登录时长", dayHours, dayHoursAverage, listUsers);
-        dayHoursAppWebsite = getAppWebsite(dayHoursTotal);
-        addAppWebsiteToList(dayHoursAppWebsite, listUsers);
+        dayHoursAppWebsite = getAppWebsite(dayHoursAverage);
+        addAppWebsiteToList("average",dayHoursAppWebsite, listUsers);
 
 
         //获取交易用户数
