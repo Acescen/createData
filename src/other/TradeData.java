@@ -260,7 +260,11 @@ public class TradeData {
         getFinanceAmount();
         toFinanceAmount = getTotal(FinanceAmount);
         addDataToList("交易金额", FinanceAmount, toFinanceAmount, listTrade);
-        FinanceAmountAppWebsite = getAppWebsite(toFinanceAmount);
+        for (int i=0;i<month.length;i++){
+            FinanceAmountAppWebsite[0][i]=toFinanceAmount[i];
+            FinanceAmountAppWebsite[1][i]=toFinanceAmount[i];
+        }
+        //FinanceAmountAppWebsite = getAppWebsite(toFinanceAmount);
         addAppWebsiteToList("total",FinanceAmountAppWebsite, listTrade);
         //交易人数
         getFinanceTrPeople();
@@ -272,7 +276,11 @@ public class TradeData {
         getFinanceTrNum();
         toFinanceTrNum = getTotal(FinanceTrNum);
         addDataToList("交易笔数", FinanceTrNum, toFinanceTrNum, listTrade);
-        FinanceTrNumAppWebsite = getAppWebsite(toFinanceTrNum);
+        for (int i=0;i<month.length;i++){
+            FinanceTrNumAppWebsite[0][i]=toFinanceTrNum[i];
+            FinanceTrNumAppWebsite[1][i]=toFinanceTrNum[i];
+        }
+        //FinanceTrNumAppWebsite = getAppWebsite(toFinanceTrNum);
         addAppWebsiteToList(FinanceTrNumAppWebsite, listTrade);
 
 

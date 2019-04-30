@@ -48,6 +48,7 @@ public class Users {
     public static int[] baseNum = {13, 20};
     public static double[][] dayHours = new double[4][month.length];
     public static double[][] dayHoursAppWebsite = new double[3][month.length];
+    public static double[][] dayHoursAppWebsite1 = new double[3][month.length];
 
     //交易用户数（老交易+新交易）
     public static int[] tradeUsers = new int[month.length];
@@ -229,8 +230,8 @@ public class Users {
             );
             EcStatic.randomIndex++;
             appWebsite[0][i] = total[i];
-            appWebsite[1][i] = (int) (total[i] * ratio);
-            appWebsite[2][i] = total[i] - appWebsite[1][i];
+            appWebsite[2][i] = (int) (total[i] * ratio);
+            appWebsite[1][i] = total[i] - appWebsite[2][i];
         }
         return appWebsite;
     }
@@ -244,12 +245,28 @@ public class Users {
             );
             EcStatic.randomIndex++;
             appWebsite[0][i] = total[i];
-            appWebsite[1][i] = (total[i] * ratio);
-            appWebsite[2][i] = total[i] - appWebsite[1][i];
+            appWebsite[2][i] = (total[i] * ratio);
+            appWebsite[1][i] = total[i] - appWebsite[2][i];
         }
         return appWebsite;
     }
+    //生成日活用户与每日登录时长的app网站分类数据
+    public static void getAppWebsite(double[] dayHoursAverage,int[] dayUsersTotal) {
+        for (int i = 0; i < month.length; i++) {
+            double ratio = Double.parseDouble(getValue("lowWebsite"))
+                    + getRandom(EcStatic.randomIndex) * (
+                    (Double.parseDouble(getValue("highWebsite"))) - (Double.parseDouble(getValue("lowWebsite")))
+            );
+            EcStatic.randomIndex++;
+            dayUsersAppWebsite[0][i] = dayUsersTotal[i];
+            dayUsersAppWebsite[2][i] = (int) (dayUsersTotal[i] * ratio);
+            dayUsersAppWebsite[1][i] = dayUsersTotal[i] - dayUsersAppWebsite[2][i];
 
+            dayHoursAppWebsite[0][i] = dayHoursAverage[i];
+            dayHoursAppWebsite[2][i] = (dayHoursAverage[i] * ratio);
+            dayHoursAppWebsite[1][i] = dayHoursAverage[i] - dayHoursAppWebsite[2][i];
+        }
+    }
 
     public static List<Map> getUsersList() throws ParseException {
         List<Map> listUsers = new ArrayList<Map>();
@@ -295,14 +312,11 @@ public class Users {
         mauUsersAppWebsite = getAppWebsite(mauUsersTotal);
         addAppWebsiteToList(mauUsersAppWebsite, listUsers);
 
-        //日活用户
+
         getDayUsers();
         int dayUsersTotal[] = getTotal(dayUsers);
         addDataToList("日活用户", dayUsers, dayUsersTotal, listUsers);
-        dayUsersAppWebsite = getAppWebsite(dayUsersTotal);
-        addAppWebsiteToList(dayUsersAppWebsite, listUsers);
-
-
+        //日活用户与每日登录时长关联，使用同一随机数生成app网站分类数据
         double dayHoursTotal[] = new double[month.length];
         for (int i = 0; i < month.length; i++) {
             for (int j = 0; j < 4; j++) {
@@ -314,6 +328,12 @@ public class Users {
         for (int i = 0; i < month.length; i++) {
             dayHoursAverage[i] = dayHoursTotal[i] / 4.00;
         }
+        //getAppWebsite(dayHoursAverage,dayUsersTotal);
+        dayUsersAppWebsite = getAppWebsite(dayUsersTotal);
+        addAppWebsiteToList(dayUsersAppWebsite, listUsers);
+
+
+
 
         addDataToList("每日登录时长", dayHours, dayHoursAverage, listUsers);
         dayHoursAppWebsite = getAppWebsite(dayHoursAverage);
