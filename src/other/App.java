@@ -1,7 +1,7 @@
 package other;
 
 
-import static other.EcStatic.getAmount;
+import static other.EcStatic.*;
 import static other.RandomGenerator.init;
 import static other.RandomGenerator.writeToTxt;
 import static other.Users.getDayHours;
@@ -16,8 +16,10 @@ public class App {
         //初始化随机数,月份，reg
         init();
         //先获取随机数
-        //获取三组数据
-        getAmount();
+        //获取数据
+        getAppAndWebCount();
+        getAppAndWebAmount();
+
         //获取每日登录时长
         getDayHours();
 

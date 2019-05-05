@@ -75,7 +75,7 @@ public class RandomGenerator {
         while ((str = bf.readLine()) != null) {
             list.add(str);
         }
-        Randoms = new double[month.length * 500];
+        Randoms = new double[month.length * 1500];
         for (int i = 0; i < list.size(); i++) {
             String s = list.get(i);
             Randoms[i] = Double.parseDouble(s);

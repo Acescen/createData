@@ -4,6 +4,7 @@ package other;
 import util.PFDate;
 
 import static other.RandomGenerator.getRandom;
+import static util.Getproperties.getValue;
 
 public class EcStatic {
     public static double[] beforeMonth = {4, 8};
@@ -21,24 +22,37 @@ public class EcStatic {
 
 
     ///区域关系比例
-    public static double[] us = {0.35, 0.40};
-    public static double[] uk = {0.28, 0.30};
-    public static double[] sa = {0.20, 0.23};
+    public static double[] us = {Double.parseDouble(getValue("lowUs")), Double.parseDouble(getValue("highUs"))};
+    public static double[] uk = {Double.parseDouble(getValue("lowUk")), Double.parseDouble(getValue("highUk"))};
+    public static double[] sa = {Double.parseDouble(getValue("lowSa")), Double.parseDouble(getValue("highSa"))};
     ///人与次数的关系
-    public static int[] countRate1 = {1, 2};
-    public static int[] countRate2 = {2, 4};
-    public static int[] countRate3 = {3, 5};
+    public static int[] countRate1 = {Integer.parseInt(getValue("lowCountRate1")), Integer.parseInt(getValue("highCountRate1"))};
+    public static int[] countRate2 = {Integer.parseInt(getValue("lowCountRate2")), Integer.parseInt(getValue("highCountRate2"))};
+    public static int[] countRate3 = {Integer.parseInt(getValue("lowCountRate3")), Integer.parseInt(getValue("highCountRate3"))};
     ///次数与金额的关系
-    public static int[] amountRateEc = {4000, 5000};//电商金额范围
-    public static int[] amountRateFa = {5000, 6000};//金融金额范围
+    //电商金额范围
+    public static int[] amountRateEc = {Integer.parseInt(getValue("lowAmountRateEc")), Integer.parseInt(getValue("highAmountRateEc"))};
+    //金融金额范围
+    public static int[] amountRateFa = {Integer.parseInt(getValue("lowAmountRateFa")), Integer.parseInt(getValue("highAmountRateFa"))};
     ///电商，金融比例
-    public static double[] ecRate = {0.83, 0.88};//电商比例范围
+    public static double[] ecRate = {Double.parseDouble(getValue("lowEcRate")), Double.parseDouble(getValue("highEcRate"))};//电商比例范围
+    //app,网站比例
+    //网站比例(app比例=1-网站比例)
+    public static double[] websiteRate = {Double.parseDouble(getValue("lowWebsite")), Double.parseDouble(getValue("highWebsite"))};
 
     ///数据输出，us=0,uk=1,sa=2,other=3
     //0,电商；1，金融
     public static int[][][][] peopleNum;//交易人数
     public static int[][][][] orderNum;//交易次数
     public static double[][][][] amountNum;//交易金额
+    /*      [0].电商，金融
+            [1].网站，app
+            [2].区域{"美国", "欧洲", "东南亚", "其他"}
+            [3].月份
+            [4].月份
+     */
+    public static int[][][][][] appAndWebOrderNum;//app和网站维度交易次数
+    public static double[][][][][] appAndWebAmountNum;//app和网站维度交易金额
 
     public static int randomIndex = 0;
 
@@ -225,7 +239,7 @@ public class EcStatic {
             amountNum = new double[2][4][1000][1000];
         }
 
-        int[][][][] count = getCount();
+        orderNum = getCount();
 
         for (int i = 0; i < month.length; i++) {
             for (int j = 0; j < month.length; j++) {
@@ -245,17 +259,17 @@ public class EcStatic {
                         boundedDoubleFa = amountRateFa[0] + getRandom(randomIndex) * (amountRateFa[1] - amountRateFa[0]);
                     }
 
-                    amountNum[0][k][i][j] = ((count[0][k][i][j] * boundedDoubleEc) / 1000) * fixEcAmountPara;
+                    amountNum[0][k][i][j] = ((orderNum[0][k][i][j] * boundedDoubleEc) / 1000) * fixEcAmountPara;
                     //fix:2018年8月份之前增长太快
                     if (j > 14) {
-                        amountNum[0][k][i][j] = ((count[0][k][i][j] * boundedDoubleEc) / 1000) * fixEcAmountPara * 0.857f;
+                        amountNum[0][k][i][j] = ((orderNum[0][k][i][j] * boundedDoubleEc) / 1000) * fixEcAmountPara * 0.857f;
 
                     }
                     //ntotal += amountNum[0][k][i][j];
                     //fix:2018年9月份开始金融、电商客单价过低
                     if (j > 20) {
-                        amountNum[0][k][i][j] = ((count[0][k][i][j] * boundedDoubleEc) / 1000) * fixEcAmountPara * 0.72f;
-                        amountNum[1][k][i][j] = ((count[1][k][i][j] * boundedDoubleFa) / 1000) * 11.2;
+                        amountNum[0][k][i][j] = ((orderNum[0][k][i][j] * boundedDoubleEc) / 1000) * fixEcAmountPara * 0.72f;
+                        amountNum[1][k][i][j] = ((orderNum[1][k][i][j] * boundedDoubleFa) / 1000) * 11.2;
                     }
                     //ntotal += amountNum[1][k][i][j];
 
@@ -267,9 +281,76 @@ public class EcStatic {
         return amountNum;
     }
 
+    //获取app和网站维度交易次数
+    public static int[][][][][] getAppAndWebCount() {
+        if (appAndWebOrderNum != null) {
+            return appAndWebOrderNum;
+        } else {
+            appAndWebOrderNum = new int[2][2][4][1000][1000];
+        }
+        orderNum = getCount();
+        //电商，金融
+        for (int i = 0; i < 2; i++) {
+            //区域{"美国", "欧洲", "东南亚", "其他"}
+            for (int n = 0; n < 4; n++) {
+                //月份
+                for (int k = 0; k < month.length; k++) {
+                    //月份
+                    for (int m = 0; m < month.length; m++) {
+                        if (i == 0) {
+                            double websiteDoubleRate = websiteRate[0] + getRandom(randomIndex) * (websiteRate[1] - websiteRate[0]);
+                            randomIndex++;
+                            //网站
+                            appAndWebOrderNum[i][0][n][k][m] = (int) (orderNum[i][n][k][m] * websiteDoubleRate);
+                        }
+                            //app
+                            appAndWebOrderNum[i][1][n][k][m] = orderNum[i][n][k][m] - appAndWebOrderNum[i][0][n][k][m];
+
+
+
+                    }
+                }
+            }
+        }
+
+        return appAndWebOrderNum;
+    }
+
+    //获取app和网站维度交易金额
+    public static double[][][][][] getAppAndWebAmount() {
+        if (appAndWebAmountNum != null) {
+            return appAndWebAmountNum;
+        } else {
+            appAndWebAmountNum = new double[2][2][4][1000][1000];
+        }
+        amountNum = getAmount();
+        //电商，金融
+        for (int i = 0; i < 2; i++) {
+            //区域{"美国", "欧洲", "东南亚", "其他"}
+            for (int n = 0; n < 4; n++) {
+                //月份
+                for (int k = 0; k < month.length; k++) {
+                    //月份
+                    for (int m = 0; m < month.length; m++) {
+                        if (i == 0) {
+                            double websiteDoubleRate = websiteRate[0] + getRandom(randomIndex) * (websiteRate[1] - websiteRate[0]);
+                            randomIndex++;
+                            //网站
+                            appAndWebAmountNum[i][0][n][k][m] = (int) (amountNum[i][n][k][m] * websiteDoubleRate);
+                        }
+                        //app
+                        appAndWebAmountNum[i][1][n][k][m] = amountNum[i][n][k][m] - appAndWebAmountNum[i][0][n][k][m];
+
+
+                    }
+                }
+            }
+        }
+
+        return appAndWebAmountNum;
+    }
 
     public static void main(String[] args) {
-        getAmount();
     }
 
 }

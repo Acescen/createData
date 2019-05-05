@@ -1,7 +1,5 @@
 package other;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static other.EcStatic.*;
@@ -63,7 +61,7 @@ public class TradeData {
     public static int toFinanceTrNum[] = new int[month.length];
     public static int[][] FinanceTrNumAppWebsite = new int[3][month.length];
 
-
+    //获取总金额
     public static double[][] getTotalAmount() {
         //getAmount();
         for (int i = 0; i < 4; i++) {
@@ -85,6 +83,31 @@ public class TradeData {
         return totalAmount;
     }
 
+    public static double[][] getTotalAmountAppWebsite() {
+        for (int n = 0; n < month.length; n++) {
+            for (int m = 0; m < month.length; m++) {
+                for (int j = 0; j < 4; j++) {
+                    for (int i = 0; i < 2; i++) {
+                        for (int k = 0; k < 2; k++) {
+                            totalAmountAppWebsite[0][n] += appAndWebAmountNum[i][k][j][m][n];
+                        }
+                        totalAmountAppWebsite[1][n] += appAndWebAmountNum[i][1][j][m][n];
+                        totalAmountAppWebsite[2][n] += appAndWebAmountNum[i][0][j][m][n];
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < month.length; j++) {
+                totalAmountAppWebsite[i][j] = (double) Math.round(totalAmountAppWebsite[i][j] * 100) / 100;
+
+            }
+        }
+
+        return totalAmountAppWebsite;
+    }
+
+    //获取交易总笔数
     public static int[][] getTotalTradeNum() {
         //getCount();
         for (int i = 0; i < 4; i++) {
@@ -105,7 +128,25 @@ public class TradeData {
         return totalTradeNum;
     }
 
+    public static int[][] getTotalTradeNumAppWebsite() {
+        for (int n = 0; n < month.length; n++) {
+            for (int m = 0; m < month.length; m++) {
+                for (int j = 0; j < 4; j++) {
+                    for (int i = 0; i < 2; i++) {
+                        for (int k = 0; k < 2; k++) {
+                            totalTradeNumAppWebsite[0][n] += appAndWebOrderNum[i][k][j][m][n];
+                        }
+                        totalTradeNumAppWebsite[1][n] += appAndWebOrderNum[i][1][j][m][n];
+                        totalTradeNumAppWebsite[2][n] += appAndWebOrderNum[i][0][j][m][n];
+                    }
+                }
+            }
+        }
 
+        return totalTradeNumAppWebsite;
+    }
+
+    //获取电商模块相关数据
     public static double[][] getOnlineRetAmount() {
         //getAmount();
         for (int i = 0; i < 4; i++) {
@@ -122,6 +163,31 @@ public class TradeData {
             }
         }
         return onlineRetAmount;
+    }
+
+    public static double[][] getOnlineRetAmountAppWebsite() {
+        for (int n = 0; n < month.length; n++) {
+            for (int m = 0; m < month.length; m++) {
+                for (int j = 0; j < 4; j++) {
+
+                    for (int k = 0; k < 2; k++) {
+                        onlineRetAmountAppWebsite[0][n] += appAndWebAmountNum[0][k][j][m][n];
+                    }
+                    onlineRetAmountAppWebsite[1][n] += appAndWebAmountNum[0][1][j][m][n];
+                    onlineRetAmountAppWebsite[2][n] += appAndWebAmountNum[0][0][j][m][n];
+
+                }
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < month.length; j++) {
+                onlineRetAmountAppWebsite[i][j] = (double) Math.round(onlineRetAmountAppWebsite[i][j] * 100) / 100;
+
+            }
+        }
+
+
+        return onlineRetAmountAppWebsite;
     }
 
     public static int[][] getOnlineRetTrPeople() {
@@ -154,7 +220,24 @@ public class TradeData {
         return onlineRetTrNum;
     }
 
+    public static int[][] getOnlineRetTrNumAppWebsite() {
+        for (int n = 0; n < month.length; n++) {
+            for (int m = 0; m < month.length; m++) {
+                for (int j = 0; j < 4; j++) {
 
+                    for (int k = 0; k < 2; k++) {
+                        onlineRetTrNumAppWebsite[0][n] += appAndWebOrderNum[0][k][j][m][n];
+                    }
+                    onlineRetTrNumAppWebsite[1][n] += appAndWebOrderNum[0][1][j][m][n];
+                    onlineRetTrNumAppWebsite[2][n] += appAndWebOrderNum[0][0][j][m][n];
+
+                }
+            }
+        }
+        return onlineRetTrNumAppWebsite;
+    }
+
+    //获取金融模块相关数据
     public static double[][] getFinanceAmount() {
         //getAmount();
         for (int i = 0; i < 4; i++) {
@@ -171,6 +254,30 @@ public class TradeData {
             }
         }
         return FinanceAmount;
+    }
+
+    public static double[][] getFinanceAmountAppWebsite() {
+        for (int n = 0; n < month.length; n++) {
+            for (int m = 0; m < month.length; m++) {
+                for (int j = 0; j < 4; j++) {
+
+                    for (int k = 0; k < 2; k++) {
+                        FinanceAmountAppWebsite[0][n] += appAndWebAmountNum[1][k][j][m][n];
+                    }
+                    FinanceAmountAppWebsite[1][n] += appAndWebAmountNum[1][1][j][m][n];
+                    FinanceAmountAppWebsite[2][n] += appAndWebAmountNum[1][0][j][m][n];
+
+                }
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < month.length; j++) {
+                FinanceAmountAppWebsite[i][j] = (double) Math.round(FinanceAmountAppWebsite[i][j] * 100) / 100;
+
+            }
+        }
+
+        return FinanceAmountAppWebsite;
     }
 
     public static int[][] getFinanceTrPeople() {
@@ -201,6 +308,23 @@ public class TradeData {
         return FinanceTrNum;
     }
 
+    public static int[][] getFinanceTrNumAppWebsite() {
+        for (int n = 0; n < month.length; n++) {
+            for (int m = 0; m < month.length; m++) {
+                for (int j = 0; j < 4; j++) {
+
+                    for (int k = 0; k < 2; k++) {
+                        FinanceTrNumAppWebsite[0][n] += appAndWebOrderNum[1][k][j][m][n];
+                    }
+                    FinanceTrNumAppWebsite[1][n] += appAndWebOrderNum[1][1][j][m][n];
+                    FinanceTrNumAppWebsite[2][n] += appAndWebOrderNum[1][0][j][m][n];
+
+                }
+            }
+        }
+        return FinanceTrNumAppWebsite;
+    }
+
 
     public static List<Map> getTradeDataList() {
         List<Map> listTrade = new ArrayList<Map>();
@@ -213,14 +337,14 @@ public class TradeData {
         getTotalAmount();
         toTotalAmount = getTotal(totalAmount);
         addDataToList("交易总金额", totalAmount, toTotalAmount, listTrade);
-        totalAmountAppWebsite = getAppWebsite(toTotalAmount);
-        addAppWebsiteToList("total",totalAmountAppWebsite, listTrade);
+        getTotalAmountAppWebsite();
+        addAppWebsiteToList("total", totalAmountAppWebsite, listTrade);
 
         //获取交易总笔数
         getTotalTradeNum();
         toTotalTradeNum = getTotal(totalTradeNum);
         addDataToList("交易总笔数", totalTradeNum, toTotalTradeNum, listTrade);
-        totalTradeNumAppWebsite = getAppWebsite(toTotalTradeNum);
+        getTotalTradeNumAppWebsite();
         addAppWebsiteToList(totalTradeNumAppWebsite, listTrade);
         listTrade.add(mapNull);
         listTrade.add(mapNull);
@@ -234,8 +358,8 @@ public class TradeData {
         getOnlineRetAmount();
         toOnlineRetAmount = getTotal(onlineRetAmount);
         addDataToList("交易金额", onlineRetAmount, toOnlineRetAmount, listTrade);
-        onlineRetAmountAppWebsite = getAppWebsite(toOnlineRetAmount);
-        addAppWebsiteToList("total",onlineRetAmountAppWebsite, listTrade);
+        getOnlineRetAmountAppWebsite();
+        addAppWebsiteToList("total", onlineRetAmountAppWebsite, listTrade);
         //交易人数
         getOnlineRetTrPeople();
         toOnlineRetTrPeople = getTotal(onlineRetTrPeople);
@@ -246,7 +370,7 @@ public class TradeData {
         getOnlineRetTrNum();
         toOnlineRetTrNum = getTotal(onlineRetTrNum);
         addDataToList("交易笔数", onlineRetTrNum, toOnlineRetTrNum, listTrade);
-        onlineRetTrNumAppWebsite = getAppWebsite(toOnlineRetTrNum);
+        getOnlineRetTrNumAppWebsite();
         addAppWebsiteToList(onlineRetTrNumAppWebsite, listTrade);
         listTrade.add(mapNull);
         listTrade.add(mapNull);
@@ -260,27 +384,18 @@ public class TradeData {
         getFinanceAmount();
         toFinanceAmount = getTotal(FinanceAmount);
         addDataToList("交易金额", FinanceAmount, toFinanceAmount, listTrade);
-        for (int i=0;i<month.length;i++){
-            FinanceAmountAppWebsite[0][i]=toFinanceAmount[i];
-            FinanceAmountAppWebsite[1][i]=toFinanceAmount[i];
-        }
-        //FinanceAmountAppWebsite = getAppWebsite(toFinanceAmount);
-        addAppWebsiteToList("total",FinanceAmountAppWebsite, listTrade);
+        getFinanceAmountAppWebsite();
+        addAppWebsiteToList("total", FinanceAmountAppWebsite, listTrade);
         //交易人数
         getFinanceTrPeople();
         toFinanceTrPeople = getTotal(FinanceTrPeople);
         addDataToList("交易人数", FinanceTrPeople, toFinanceTrPeople, listTrade);
-        //FinanceTrPeopleAppWebsite = getAppWebsite(toFinanceTrPeople);
-        //addAppWebsiteToList(FinanceTrPeopleAppWebsite, listTrade);
+
         //交易笔数
         getFinanceTrNum();
         toFinanceTrNum = getTotal(FinanceTrNum);
         addDataToList("交易笔数", FinanceTrNum, toFinanceTrNum, listTrade);
-        for (int i=0;i<month.length;i++){
-            FinanceTrNumAppWebsite[0][i]=toFinanceTrNum[i];
-            FinanceTrNumAppWebsite[1][i]=toFinanceTrNum[i];
-        }
-        //FinanceTrNumAppWebsite = getAppWebsite(toFinanceTrNum);
+        getFinanceTrNumAppWebsite();
         addAppWebsiteToList(FinanceTrNumAppWebsite, listTrade);
 
 
