@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static other.EcStatic.getAmount;
-import static other.EcStatic.month;
-import static other.EcStatic.reg;
+import static other.EcStatic.*;
+import static util.Getproperties.*;
 
 /**
  * @Author: jurui
@@ -18,7 +17,6 @@ import static other.EcStatic.reg;
  */
 public class RandomGenerator {
     public static double[] Randoms;
-    public static Random random;
 
     public static void initMonth() throws IOException {
         File f = new File("month.txt");
@@ -39,27 +37,33 @@ public class RandomGenerator {
         }
         bf.close();
         fileReader.close();
+        System.out.println("初始化月份信息成功");
     }
 
-    public static void initReg() throws IOException {
-        File f = new File("reg.txt");
-        if (!f.exists()) {
-            f.createNewFile();
+    public static void initReg() throws NumberFormatException {
+        //File f = new File("reg.txt");
+        //if (!f.exists()) {
+        //    f.createNewFile();
+        //}
+        //List<String> list = new ArrayList<>();
+        //FileReader fileReader = new FileReader(f.getAbsoluteFile());
+        //BufferedReader bf = new BufferedReader(fileReader);
+        //String str;
+        //while ((str = bf.readLine()) != null) {
+        //    list.add(str);
+        //}
+        //
+        //reg = new int[list.size()];
+        //for (int i = 0; i < list.size(); i++) {
+        //    reg[i] = Integer.parseInt(list.get(i));
+        //}
+        //bf.close();
+        //fileReader.close();
+        reg = new int[month.length];
+        for (int i = 0; i < month.length; i++) {
+            reg[i] = Integer.parseInt(parameters[i][20]);
         }
-        List<String> list = new ArrayList<>();
-        FileReader fileReader = new FileReader(f.getAbsoluteFile());
-        BufferedReader bf = new BufferedReader(fileReader);
-        String str;
-        while ((str = bf.readLine()) != null) {
-            list.add(str);
-        }
-
-        reg = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            reg[i] = Integer.parseInt(list.get(i));
-        }
-        bf.close();
-        fileReader.close();
+        System.out.println("初始化reg基数成功");
     }
 
 
@@ -82,6 +86,7 @@ public class RandomGenerator {
         }
         bf.close();
         fileReader.close();
+        System.out.println("初始化随机数成功");
     }
 
 
@@ -116,13 +121,20 @@ public class RandomGenerator {
 
     }
 
+    public static void initParameters() {
+        parameters = new String[month.length][25];
+        for (int i = 0; i < month.length; i++) {
+            parameters[i] = getValues(month[i]);
+        }
+        System.out.println("初始化月份相关参数成功");
+    }
+
     public static void init() throws IOException {
 
         initMonth();
-        initReg();
         initRandom();
-
-
+        initParameters();
+        initReg();
     }
 
     public static void main(String[] args) throws IOException {

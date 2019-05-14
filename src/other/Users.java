@@ -8,7 +8,6 @@ import static other.EcStatic.*;
 import static other.RandomGenerator.getRandom;
 import static util.Excel.addAppWebsiteToList;
 import static util.Excel.addDataToList;
-import static util.Getproperties.getValue;
 
 /**
  * @Author: jurui
@@ -224,10 +223,11 @@ public class Users {
     public static int[][] getAppWebsite(int[] total) {
         int[][] appWebsite = new int[3][month.length];
         for (int i = 0; i < month.length; i++) {
-            double ratio = Double.parseDouble(getValue("lowWebsite"))
+            double[] websiteRate = {Double.parseDouble(parameters[i][18]), Double.parseDouble(parameters[i][19])};
+
+            double ratio = websiteRate[0]
                     + getRandom(EcStatic.randomIndex) * (
-                      (Double.parseDouble(getValue("highWebsite"))) - (Double.parseDouble(getValue("lowWebsite")))
-            );
+                    websiteRate[1] - websiteRate[0]);
             EcStatic.randomIndex++;
             appWebsite[0][i] = total[i];
             appWebsite[2][i] = (int) (total[i] * ratio);
@@ -239,10 +239,11 @@ public class Users {
     public static double[][] getAppWebsite(double[] total) {
         double[][] appWebsite = new double[3][month.length];
         for (int i = 0; i < month.length; i++) {
-            double ratio = Double.parseDouble(getValue("lowWebsite"))
+            double[] websiteRate = {Double.parseDouble(parameters[i][18]), Double.parseDouble(parameters[i][19])};
+
+            double ratio = websiteRate[0]
                     + getRandom(EcStatic.randomIndex) * (
-                    (Double.parseDouble(getValue("highWebsite"))) - (Double.parseDouble(getValue("lowWebsite")))
-            );
+                    websiteRate[1] - websiteRate[0]);
             EcStatic.randomIndex++;
             appWebsite[0][i] = total[i];
             appWebsite[2][i] = (total[i] * ratio);
@@ -250,13 +251,15 @@ public class Users {
         }
         return appWebsite;
     }
+
     //生成日活用户与每日登录时长的app网站分类数据
-    public static void getAppWebsite(double[] dayHoursAverage,int[] dayUsersTotal) {
+    public static void getAppWebsite(double[] dayHoursAverage, int[] dayUsersTotal) {
         for (int i = 0; i < month.length; i++) {
-            double ratio = Double.parseDouble(getValue("lowWebsite"))
+            double[] websiteRate = {Double.parseDouble(parameters[i][18]), Double.parseDouble(parameters[i][19])};
+
+            double ratio = websiteRate[0]
                     + getRandom(EcStatic.randomIndex) * (
-                    (Double.parseDouble(getValue("highWebsite"))) - (Double.parseDouble(getValue("lowWebsite")))
-            );
+                    websiteRate[1] - websiteRate[0]);
             EcStatic.randomIndex++;
             dayUsersAppWebsite[0][i] = dayUsersTotal[i];
             dayUsersAppWebsite[2][i] = (int) (dayUsersTotal[i] * ratio);
@@ -295,15 +298,20 @@ public class Users {
         tradeUsers = getTradeUsers();
         //修正月活用户数量 大于交易用户的情况 2019-4-11
         for (int i = 0; i < mauUsersTotal.length && i < tradeUsers.length; i++) {
+            double[] us = {Double.parseDouble(parameters[i][0]), Double.parseDouble(parameters[i][1])};
+            double[] uk = {Double.parseDouble(parameters[i][2]), Double.parseDouble(parameters[i][3])};
+            double[] sa = {Double.parseDouble(parameters[i][4]), Double.parseDouble(parameters[i][5])};
+
+
             double ratio = ((double) tradeUsers[i]) / ((double) mauUsersTotal[i]);
             if (ratio < 0.15 || ratio > 0.8) {
                 //float rnd = 0.45f + new Random().nextFloat() * (0.55f-0.45f);
                 double rnd = 0.45 + getRandom(EcStatic.randomIndex) * (0.55 - 0.45);
                 EcStatic.randomIndex++;
                 mauUsersTotal[i] = (int) (tradeUsers[i] / rnd);
-                mauUsers[0][i] = (int) (mauUsersTotal[i] * EcStatic.us[0]);
-                mauUsers[1][i] = (int) (mauUsersTotal[i] * EcStatic.uk[0]);
-                mauUsers[2][i] = (int) (mauUsersTotal[i] * EcStatic.sa[0]);
+                mauUsers[0][i] = (int) (mauUsersTotal[i] * us[0]);
+                mauUsers[1][i] = (int) (mauUsersTotal[i] * uk[0]);
+                mauUsers[2][i] = (int) (mauUsersTotal[i] * sa[0]);
                 mauUsers[3][i] = mauUsersTotal[i] - mauUsers[0][i] - mauUsers[1][i] - mauUsers[2][i];
 
             }
@@ -333,11 +341,9 @@ public class Users {
         addAppWebsiteToList(dayUsersAppWebsite, listUsers);
 
 
-
-
         addDataToList("每日登录时长", dayHours, dayHoursAverage, listUsers);
         dayHoursAppWebsite = getAppWebsite(dayHoursAverage);
-        addAppWebsiteToList("average",dayHoursAppWebsite, listUsers);
+        addAppWebsiteToList("average", dayHoursAppWebsite, listUsers);
 
 
         //获取交易用户数

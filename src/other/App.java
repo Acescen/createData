@@ -13,7 +13,7 @@ import static util.Excel.*;
 public class App {
 
     public static void main(String[] args) throws Exception {
-        //初始化随机数,月份，reg
+        //初始化随机数,月份，参数
         init();
         //先获取随机数
         //获取数据

@@ -4,7 +4,6 @@ package other;
 import util.PFDate;
 
 import static other.RandomGenerator.getRandom;
-import static util.Getproperties.getValue;
 
 public class EcStatic {
     public static double[] beforeMonth = {4, 8};
@@ -20,25 +19,39 @@ public class EcStatic {
 
     public static String[] country = {"美国", "欧洲", "东南亚", "其他"};
 
+    //String[] getValues(month)根据月份获取参数值
+    //数组中参数说明：#参数说明：月份=(区域关系比例)[month][0]美国所占最低比例，[month][1]美国所占最高比例,
+    //                       [month][2]欧洲所占最低比例，[month][3]欧洲所占最高比例,
+    //                       [month][4]东南亚所占最低比例，[month][5]东南亚所占最高比例,
+    //   (交易人数与交易次数关系)[month][6]当前月小于三分之一月份总数最低倍数，[month][7]最高倍数，
+    //                       [month][8]当前月小于三分之二月份总数最低倍数，[month][9]最高倍数，
+    //                       [month][10]当前月大于等于三分之二月份总数最低倍数，[month][11]最高倍数，
+    //   (交易次数与交易金额的关系)[month][12]电商金额最低倍数,[month][13]最高倍数,
+    //                        [month][14]金融金额最低倍数,[month][15]最高倍数,
+    //           (电商金融比例) [month][16]电商最低比例，[month][17]电商最高比例
+    //           (app,网站比例) [month][18]网站最低比例，[month][19]网站最高比例
+    //                          [month][20]生成数据所用基数(交易人数对角线数字)
+    public static String[][] parameters;
 
-    ///区域关系比例
-    public static double[] us = {Double.parseDouble(getValue("lowUs")), Double.parseDouble(getValue("highUs"))};
-    public static double[] uk = {Double.parseDouble(getValue("lowUk")), Double.parseDouble(getValue("highUk"))};
-    public static double[] sa = {Double.parseDouble(getValue("lowSa")), Double.parseDouble(getValue("highSa"))};
-    ///人与次数的关系
-    public static int[] countRate1 = {Integer.parseInt(getValue("lowCountRate1")), Integer.parseInt(getValue("highCountRate1"))};
-    public static int[] countRate2 = {Integer.parseInt(getValue("lowCountRate2")), Integer.parseInt(getValue("highCountRate2"))};
-    public static int[] countRate3 = {Integer.parseInt(getValue("lowCountRate3")), Integer.parseInt(getValue("highCountRate3"))};
-    ///次数与金额的关系
-    //电商金额范围
-    public static int[] amountRateEc = {Integer.parseInt(getValue("lowAmountRateEc")), Integer.parseInt(getValue("highAmountRateEc"))};
-    //金融金额范围
-    public static int[] amountRateFa = {Integer.parseInt(getValue("lowAmountRateFa")), Integer.parseInt(getValue("highAmountRateFa"))};
-    ///电商，金融比例
-    public static double[] ecRate = {Double.parseDouble(getValue("lowEcRate")), Double.parseDouble(getValue("highEcRate"))};//电商比例范围
-    //app,网站比例
-    //网站比例(app比例=1-网站比例)
-    public static double[] websiteRate = {Double.parseDouble(getValue("lowWebsite")), Double.parseDouble(getValue("highWebsite"))};
+
+    /////区域关系比例
+    //public static double[] us = {Double.parseDouble(getValue("lowUs")), Double.parseDouble(getValue("highUs"))};
+    //public static double[] uk = {Double.parseDouble(getValue("lowUk")), Double.parseDouble(getValue("highUk"))};
+    //public static double[] sa = {Double.parseDouble(getValue("lowSa")), Double.parseDouble(getValue("highSa"))};
+    /////人与次数的关系
+    //public static int[] countRate1 = {Integer.parseInt(getValue("lowCountRate1")), Integer.parseInt(getValue("highCountRate1"))};
+    //public static int[] countRate2 = {Integer.parseInt(getValue("lowCountRate2")), Integer.parseInt(getValue("highCountRate2"))};
+    //public static int[] countRate3 = {Integer.parseInt(getValue("lowCountRate3")), Integer.parseInt(getValue("highCountRate3"))};
+    /////次数与金额的关系
+    ////电商金额范围
+    //public static int[] amountRateEc = {Integer.parseInt(getValue("lowAmountRateEc")), Integer.parseInt(getValue("highAmountRateEc"))};
+    ////金融金额范围
+    //public static int[] amountRateFa = {Integer.parseInt(getValue("lowAmountRateFa")), Integer.parseInt(getValue("highAmountRateFa"))};
+    /////电商，金融比例
+    //public static double[] ecRate = {Double.parseDouble(getValue("lowEcRate")), Double.parseDouble(getValue("highEcRate"))};//电商比例范围
+    ////app,网站比例
+    ////网站比例(app比例=1-网站比例)
+    //public static double[] websiteRate = {Double.parseDouble(getValue("lowWebsite")), Double.parseDouble(getValue("highWebsite"))};
 
     ///数据输出，us=0,uk=1,sa=2,other=3
     //0,电商；1，金融
@@ -73,6 +86,13 @@ public class EcStatic {
             for (int i = 0; i < month.length; i++) {
                 int total = 0;
                 for (int j = i; j < month.length; j++) {
+
+                    double[] ecRate = {Double.parseDouble(parameters[j][16]), Double.parseDouble(parameters[j][17])};
+                    double[] us = {Double.parseDouble(parameters[j][0]), Double.parseDouble(parameters[j][1])};
+                    double[] uk = {Double.parseDouble(parameters[j][2]), Double.parseDouble(parameters[j][3])};
+                    double[] sa = {Double.parseDouble(parameters[j][4]), Double.parseDouble(parameters[j][5])};
+
+
                     //获取月数之差
                     months = PFDate.getMonthDiff(month[i], month[j]);
                     double boundedDouble = 0.0;
@@ -200,6 +220,11 @@ public class EcStatic {
         for (int i = 0; i < month.length; i++) {
             int total = 0;
             for (int j = 0; j < month.length; j++) {
+                int[] countRate1 = {Integer.parseInt(parameters[j][6]), Integer.parseInt(parameters[j][7])};
+                int[] countRate2 = {Integer.parseInt(parameters[j][8]), Integer.parseInt(parameters[j][9])};
+                int[] countRate3 = {Integer.parseInt(parameters[j][10]), Integer.parseInt(parameters[j][11])};
+
+
                 for (int k = 0; k < 4; k++) {
                     double boundedDouble = 0.0;
                     for (int m = 0; m < 2; m++) {
@@ -243,6 +268,10 @@ public class EcStatic {
 
         for (int i = 0; i < month.length; i++) {
             for (int j = 0; j < month.length; j++) {
+                int[] amountRateEc = {Integer.parseInt(parameters[j][12]), Integer.parseInt(parameters[j][13])};
+                int[] amountRateFa = {Integer.parseInt(parameters[j][14]), Integer.parseInt(parameters[j][15])};
+
+
                 for (int k = 0; k < 4; k++) {
                     double boundedDoubleEc = 0.0;
                     double boundedDoubleFa = 0.0;
@@ -297,15 +326,17 @@ public class EcStatic {
                 for (int k = 0; k < month.length; k++) {
                     //月份
                     for (int m = 0; m < month.length; m++) {
+                        double[] websiteRate = {Double.parseDouble(parameters[m][18]), Double.parseDouble(parameters[m][19])};
+
+
                         if (i == 0) {
                             double websiteDoubleRate = websiteRate[0] + getRandom(randomIndex) * (websiteRate[1] - websiteRate[0]);
                             randomIndex++;
                             //网站
                             appAndWebOrderNum[i][0][n][k][m] = (int) (orderNum[i][n][k][m] * websiteDoubleRate);
                         }
-                            //app
-                            appAndWebOrderNum[i][1][n][k][m] = orderNum[i][n][k][m] - appAndWebOrderNum[i][0][n][k][m];
-
+                        //app
+                        appAndWebOrderNum[i][1][n][k][m] = orderNum[i][n][k][m] - appAndWebOrderNum[i][0][n][k][m];
 
 
                     }
@@ -332,6 +363,8 @@ public class EcStatic {
                 for (int k = 0; k < month.length; k++) {
                     //月份
                     for (int m = 0; m < month.length; m++) {
+                        double[] websiteRate = {Double.parseDouble(parameters[m][18]), Double.parseDouble(parameters[m][19])};
+
                         if (i == 0) {
                             double websiteDoubleRate = websiteRate[0] + getRandom(randomIndex) * (websiteRate[1] - websiteRate[0]);
                             randomIndex++;
