@@ -36,6 +36,11 @@ public class EcStatic {
     //           (电商金融比例) [month][16]电商最低比例，[month][17]电商最高比例
     //           (app,网站比例) [month][18]网站最低比例，[month][19]网站最高比例
     //                          [month][20]生成数据所用基数(交易人数对角线数字)
+    //
+    //               (登录时长)[month][21]每日最低登录时长，[month][22]每日最高登录时长，
+    //      (日活用户占月活用户的百分比)  [month][23]最低百分比，[month][24]最高百分比
+    //
+    //
     public static String[][] parameters;
 
 

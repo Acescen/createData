@@ -40,12 +40,12 @@ public class Users {
     public static int[][] mauUsers = new int[4][month.length];
     public static int[][] mauUsersAppWebsite = new int[3][month.length];
 
-    //日活用户(月活人数/天数)
+    //日活用户(月活人数*比例关系【0.1-0.2】)
     public static int[][] dayUsers = new int[4][month.length];
     public static int[][] dayUsersAppWebsite = new int[3][month.length];
 
     //每日登陆时长（定义一组基础数，然后成比例随机产生）
-    public static int[] baseNum = {13, 20};
+    //public static int[] baseNum;
     public static double[][] dayHours = new double[4][month.length];
     public static double[][] dayHoursAppWebsite = new double[3][month.length];
     public static double[][] dayHoursAppWebsite1 = new double[3][month.length];
@@ -134,10 +134,19 @@ public class Users {
     }
 
     public static int[][] getDayUsers() throws ParseException {
-        int[][] monUsers = getMauUsers();
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < month.length; j++) {
-                dayUsers[i][j] = monUsers[i][j] / getDayOfMon(month[j]);
+
+                double[] baseNum = {Double.parseDouble(parameters[j][23]), Double.parseDouble(parameters[j][24])};
+
+                double radom = baseNum[0] + getRandom(j, Randomsflag[j]) * (baseNum[1] - baseNum[0]);
+
+                Randomsflag[j]++;
+
+                dayUsers[i][j] = (int) (mauUsers[i][j] * radom);
+                //System.out.println(mauUsers[i][j]+"*"+radom+"="+dayUsers[i][j]);
+                //System.out.println();
             }
         }
         //System.out.println("日活用户数：");
@@ -147,9 +156,12 @@ public class Users {
     }
 
     public static double[][] getDayHours() {
+
         //保留两位小数后
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < month.length; j++) {
+                int[] baseNum = {Integer.parseInt(parameters[j][21]), Integer.parseInt(parameters[j][22])};
+
                 dayHours[i][j] = baseNum[0] + getRandom(j, Randomsflag[j]) * (baseNum[1] - baseNum[0]);
                 Randomsflag[j]++;
             }

@@ -32,7 +32,7 @@ public class Getproperties {
         if (cache.getProperty(key) != null) {
             ary = cache.getProperty(key).split(",");
         } else {
-            String base = "0.35,0.40,0.28,0.30,0.20,0.23,1,2,2,4,3,5,4000,5000,5000,6000,0.83,0.88,0.2,0.3,200000";
+            String base = "0.35,0.40,0.28,0.30,0.20,0.23,1,2,2,4,3,5,4000,5000,5000,6000,0.83,0.88,0.2,0.3,200000,13,20,0.1,0.2";
             ary = base.split(",");
         }
 
