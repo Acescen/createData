@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static other.EcStatic.*;
+import static other.RandomGenerator.Randomsflag;
 import static other.RandomGenerator.getRandom;
 import static util.Excel.addAppWebsiteToList;
 import static util.Excel.addDataToList;
@@ -100,8 +101,9 @@ public class Users {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < month.length; j++) {
                 //float ratio = 0.25f + new Random().nextFloat() * (0.35f-0.25f);
-                double ratio = 0.25 + getRandom(EcStatic.randomIndex) * (0.35 - 0.25);
-                EcStatic.randomIndex++;
+
+                double ratio = 0.25 + getRandom(j, Randomsflag[j]) * (0.35 - 0.25);
+                Randomsflag[j]++;
                 mauUsers[i][j] = (int) ((allUsers[i][j]) * (ratio));
                /* for (int k=0;k<month.length;k++){
                     for (int m=0;m<2;m++){
@@ -148,8 +150,8 @@ public class Users {
         //保留两位小数后
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < month.length; j++) {
-                randomIndex++;
-                dayHours[i][j] = baseNum[0] + getRandom(randomIndex) * (baseNum[1] - baseNum[0]);
+                dayHours[i][j] = baseNum[0] + getRandom(j, Randomsflag[j]) * (baseNum[1] - baseNum[0]);
+                Randomsflag[j]++;
             }
         }
         //System.out.println("每日登录时长：");
@@ -158,7 +160,6 @@ public class Users {
                 //System.out.print((double) Math.round((dayHours[i][j]) * 100) / 100 + "  ");
                 dayHours[i][j] = ((double) Math.round((dayHours[i][j]) * 100) / 100);
             }
-            System.out.println();
         }
         return dayHours;
     }
@@ -191,11 +192,6 @@ public class Users {
                 }
             }
         }
-        //System.out.println("交易频次：");
-        //for (int i = 0; i < tradeNum.length; i++) {
-        //    System.out.print(tradeNum[i] + "  ");
-        //}
-        //System.out.println();
         return tradeNum;
     }
 
@@ -226,9 +222,11 @@ public class Users {
             double[] websiteRate = {Double.parseDouble(parameters[i][18]), Double.parseDouble(parameters[i][19])};
 
             double ratio = websiteRate[0]
-                    + getRandom(EcStatic.randomIndex) * (
+                    + getRandom(i, Randomsflag[i]) * (
                     websiteRate[1] - websiteRate[0]);
-            EcStatic.randomIndex++;
+            Randomsflag[i]++;
+
+
             appWebsite[0][i] = total[i];
             appWebsite[2][i] = (int) (total[i] * ratio);
             appWebsite[1][i] = total[i] - appWebsite[2][i];
@@ -241,10 +239,12 @@ public class Users {
         for (int i = 0; i < month.length; i++) {
             double[] websiteRate = {Double.parseDouble(parameters[i][18]), Double.parseDouble(parameters[i][19])};
 
+
             double ratio = websiteRate[0]
-                    + getRandom(EcStatic.randomIndex) * (
+                    + getRandom(i, Randomsflag[i]) * (
                     websiteRate[1] - websiteRate[0]);
-            EcStatic.randomIndex++;
+
+            Randomsflag[i]++;
             appWebsite[0][i] = total[i];
             appWebsite[2][i] = (total[i] * ratio);
             appWebsite[1][i] = total[i] - appWebsite[2][i];
@@ -257,10 +257,11 @@ public class Users {
         for (int i = 0; i < month.length; i++) {
             double[] websiteRate = {Double.parseDouble(parameters[i][18]), Double.parseDouble(parameters[i][19])};
 
+
             double ratio = websiteRate[0]
-                    + getRandom(EcStatic.randomIndex) * (
+                    + getRandom(i, Randomsflag[i]) * (
                     websiteRate[1] - websiteRate[0]);
-            EcStatic.randomIndex++;
+            Randomsflag[i]++;
             dayUsersAppWebsite[0][i] = dayUsersTotal[i];
             dayUsersAppWebsite[2][i] = (int) (dayUsersTotal[i] * ratio);
             dayUsersAppWebsite[1][i] = dayUsersTotal[i] - dayUsersAppWebsite[2][i];
@@ -306,8 +307,10 @@ public class Users {
             double ratio = ((double) tradeUsers[i]) / ((double) mauUsersTotal[i]);
             if (ratio < 0.15 || ratio > 0.8) {
                 //float rnd = 0.45f + new Random().nextFloat() * (0.55f-0.45f);
-                double rnd = 0.45 + getRandom(EcStatic.randomIndex) * (0.55 - 0.45);
-                EcStatic.randomIndex++;
+
+
+                double rnd = 0.45 + getRandom(i, Randomsflag[i]) * (0.55 - 0.45);
+                //Randomsflag[i]++;
                 mauUsersTotal[i] = (int) (tradeUsers[i] / rnd);
                 mauUsers[0][i] = (int) (mauUsersTotal[i] * us[0]);
                 mauUsers[1][i] = (int) (mauUsersTotal[i] * uk[0]);

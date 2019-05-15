@@ -16,7 +16,11 @@ import static util.Getproperties.*;
  * @Date: Created in 20:29 2019-03-27
  */
 public class RandomGenerator {
-    public static double[] Randoms;
+    //public static double[] Randoms;
+    public static double[][] Randoms;
+    //随机数标记
+    public static int[] Randomsflag;
+
 
     public static void initMonth() throws IOException {
         File f = new File("month.txt");
@@ -41,24 +45,7 @@ public class RandomGenerator {
     }
 
     public static void initReg() throws NumberFormatException {
-        //File f = new File("reg.txt");
-        //if (!f.exists()) {
-        //    f.createNewFile();
-        //}
-        //List<String> list = new ArrayList<>();
-        //FileReader fileReader = new FileReader(f.getAbsoluteFile());
-        //BufferedReader bf = new BufferedReader(fileReader);
-        //String str;
-        //while ((str = bf.readLine()) != null) {
-        //    list.add(str);
-        //}
-        //
-        //reg = new int[list.size()];
-        //for (int i = 0; i < list.size(); i++) {
-        //    reg[i] = Integer.parseInt(list.get(i));
-        //}
-        //bf.close();
-        //fileReader.close();
+
         reg = new int[month.length];
         for (int i = 0; i < month.length; i++) {
             reg[i] = Integer.parseInt(parameters[i][20]);
@@ -68,36 +55,41 @@ public class RandomGenerator {
 
 
     public static void initRandom() throws IOException {
+        Randoms = new double[month.length][20500];
+        Randomsflag = new int[month.length];
+
         File f = new File("randomNum.txt");
         if (!f.exists()) {
             f.createNewFile();
         }
-        List<String> list = new ArrayList<>();
-        FileReader fileReader = new FileReader(f.getAbsoluteFile());
-        BufferedReader bf = new BufferedReader(fileReader);
-        String str;
-        while ((str = bf.readLine()) != null) {
-            list.add(str);
+
+        BufferedReader in = new BufferedReader(new FileReader(f.getAbsoluteFile())); //
+        String line; //一行数据
+        int row = 0;
+        //逐行读取，并将每个数组放入到数组中
+        while ((line = in.readLine()) != null) {
+            String[] temp = line.split("\t");
+            if (row < month.length) {
+                for (int j = 0; j < temp.length; j++) {
+                    Randoms[row][j] = Double.parseDouble(temp[j]);
+                }
+            }
+
+            row++;
+
         }
-        Randoms = new double[month.length * 1500];
-        for (int i = 0; i < list.size(); i++) {
-            String s = list.get(i);
-            Randoms[i] = Double.parseDouble(s);
-        }
-        bf.close();
-        fileReader.close();
+        in.close();
+
         System.out.println("初始化随机数成功");
     }
 
 
-    public static double getRandom(int index) {
-        index = index - 1;
-        if (Randoms[index] == 0) {
-            Randoms[index] = new Random().nextDouble();
+    public static double getRandom(int month, int index) {
+        if (Randoms[month][index] == 0) {
+            Randoms[month][index] = new Random().nextDouble();
             //System.out.println(index + "  " + Randoms[index]);
         }
-        return Randoms[index];
-
+        return Randoms[month][index];
 
     }
 
@@ -110,14 +102,16 @@ public class RandomGenerator {
 
         FileWriter fw = new FileWriter(f.getAbsoluteFile());
 
-        for (int i = 0; i < Randoms.length; i++) {
-            String s = String.valueOf(Randoms[i]);
-            fw.write(s);
+
+        for (int i = 0; i < month.length; i++) {
+            //System.out.println(Randoms[i].length);
+            for (int j = 0; j < Randoms[i].length; j++) {
+                fw.write(Randoms[i][j] + "\t");
+            }
             fw.write("\r\n");
         }
 
         fw.close();
-
 
     }
 

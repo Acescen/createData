@@ -68,4 +68,36 @@ public class PFDate {
         return yearInterval * 12 + monthInterval;
     }
 
+
+    public static int getYear(String month) {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date1 = null;
+        try {
+            date1 = sdf.parse(month);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        c.setTime(date1);
+
+        int y = c.get(Calendar.YEAR);
+
+        return y;
+    }
+
+    public static int getMonth(String month) {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = sdf.parse(month);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        c.setTime(date);
+        int m = c.get(Calendar.MONTH) + 1;
+        return m;
+    }
+
 }

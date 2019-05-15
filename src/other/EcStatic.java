@@ -3,7 +3,12 @@ package other;
 
 import util.PFDate;
 
+import java.text.ParseException;
+
+import static other.RandomGenerator.Randomsflag;
 import static other.RandomGenerator.getRandom;
+import static util.PFDate.getMonth;
+import static util.PFDate.getYear;
 
 public class EcStatic {
     public static double[] beforeMonth = {4, 8};
@@ -72,6 +77,7 @@ public class EcStatic {
     private static float fixPeoplePara = 0.79f;
     private static float fixEcAmountPara = 12.7f;
 
+
     //获取人数
     public static int[][][][] getPeopleNumber() {
         int months;
@@ -97,35 +103,36 @@ public class EcStatic {
                     months = PFDate.getMonthDiff(month[i], month[j]);
                     double boundedDouble = 0.0;
 
-                    boundedDouble = handleMonth(months, i);
+                    boundedDouble = handleMonth(months, i, j);
 
                     boundedDouble = boundedDouble / 100;
                     int num = (int) (boundedDouble * reg[i] * fixPeoplePara);
                     ///区分电商，金融
                     double ecRates = 1;
 
-
                     if (j >= 21) {
-                        randomIndex++;
                         num = num * 2;
-                        ecRates = ecRate[0] + getRandom(randomIndex) * (ecRate[1] - ecRate[0]);
-
+                        ecRates = ecRate[0] + getRandom(j, Randomsflag[j]) * (ecRate[1] - ecRate[0]);
+                        //Randomsflag[j]++;
                     }
                     //ecRates
                     int ecNum = (int) (num * ecRates);
                     int faNum = num - ecNum;
                     ///产生区域
-                    randomIndex++;
 
-                    double uscountryDouble = us[0] + getRandom(randomIndex) * (us[1] - us[0]);
+                    double uscountryDouble = us[0] + getRandom(j, Randomsflag[j]) * (us[1] - us[0]);
 
-                    randomIndex++;
+                    Randomsflag[j]++;
 
-                    double ukcountryDouble = uk[0] + getRandom(randomIndex) * (uk[1] - uk[0]);
+                    double ukcountryDouble = uk[0] + getRandom(j, Randomsflag[j]) * (uk[1] - uk[0]);
 
-                    randomIndex++;
+                    Randomsflag[j]++;
 
-                    double sacountryDouble = sa[0] + getRandom(randomIndex) * (sa[1] - sa[0]);
+
+                    double sacountryDouble = sa[0] + getRandom(j, Randomsflag[j]) * (sa[1] - sa[0]);
+                    Randomsflag[j]++;
+
+
                     double othercountryDouble = 1 - uscountryDouble - ukcountryDouble - sacountryDouble;
                     peopleNum[0][0][i][j] = (int) (uscountryDouble * ecNum);
                     peopleNum[0][1][i][j] = (int) (ukcountryDouble * ecNum);
@@ -133,17 +140,18 @@ public class EcStatic {
                     peopleNum[0][3][i][j] = ecNum - peopleNum[0][0][i][j] - peopleNum[0][1][i][j] - peopleNum[0][2][i][j];
 
 
-                    randomIndex++;
+                    uscountryDouble = us[0] + getRandom(j, Randomsflag[j]) * (us[1] - us[0]);
 
-                    uscountryDouble = us[0] + getRandom(randomIndex) * (us[1] - us[0]);
+                    Randomsflag[j]++;
 
-                    randomIndex++;
 
-                    ukcountryDouble = uk[0] + getRandom(randomIndex) * (uk[1] - uk[0]);
+                    ukcountryDouble = uk[0] + getRandom(j, Randomsflag[j]) * (uk[1] - uk[0]);
 
-                    randomIndex++;
+                    Randomsflag[j]++;
 
-                    sacountryDouble = sa[0] + getRandom(randomIndex) * (sa[1] - sa[0]);
+                    sacountryDouble = sa[0] + getRandom(j, Randomsflag[j]) * (sa[1] - sa[0]);
+                    Randomsflag[j]++;
+
                     othercountryDouble = 1 - uscountryDouble - ukcountryDouble - sacountryDouble;
 
 
@@ -167,40 +175,41 @@ public class EcStatic {
         return peopleNum;
     }
 
-    public static double handleMonth(int months, int i) {
+    public static double handleMonth(int months, int i, int j) {
 
         double boundedDouble = 0.0;
         if (i == 0) {
 
             if (months == 0) {
                 boundedDouble = 100;
+                //Randomsflag[j]++;
             } else {
 
 
-                randomIndex++;
-                boundedDouble = beforeMonth[0] + getRandom(randomIndex) * (beforeMonth[1] - beforeMonth[0]);
+                boundedDouble = beforeMonth[0] + getRandom(j, Randomsflag[j]) * (beforeMonth[1] - beforeMonth[0]);
+                //Randomsflag[j]++;
             }
 
         } else {
             if (months == 0) {
                 boundedDouble = 100;
+                //Randomsflag[j]++;
             } else if (months == 1) {
 
-                randomIndex++;
 
-                boundedDouble = firstMonth[0] + getRandom(randomIndex) * (firstMonth[1] - firstMonth[0]);
+                boundedDouble = firstMonth[0] + getRandom(j, Randomsflag[j]) * (firstMonth[1] - firstMonth[0]);
+                //Randomsflag[j]++;
                 //Float frand=rand.nex(firstMonth[1]-firstMonth[0]) + firstMonth[0];
             } else if (months == 2) {
 
-                randomIndex++;
 
-                boundedDouble = secondMonth[0] + getRandom(randomIndex) * (secondMonth[1] - secondMonth[0]);
-
+                boundedDouble = secondMonth[0] + getRandom(j, Randomsflag[j]) * (secondMonth[1] - secondMonth[0]);
+                //Randomsflag[j]++;
             } else {
 
-                randomIndex++;
 
-                boundedDouble = other[0] + getRandom(randomIndex) * (other[1] - other[0]);
+                boundedDouble = other[0] + getRandom(j, Randomsflag[j]) * (other[1] - other[0]);
+                //Randomsflag[j]++;
             }
         }
 
@@ -219,31 +228,45 @@ public class EcStatic {
 
         for (int i = 0; i < month.length; i++) {
             int total = 0;
-            for (int j = 0; j < month.length; j++) {
+            for (int j = i; j < month.length; j++) {
                 int[] countRate1 = {Integer.parseInt(parameters[j][6]), Integer.parseInt(parameters[j][7])};
                 int[] countRate2 = {Integer.parseInt(parameters[j][8]), Integer.parseInt(parameters[j][9])};
                 int[] countRate3 = {Integer.parseInt(parameters[j][10]), Integer.parseInt(parameters[j][11])};
 
-
                 for (int k = 0; k < 4; k++) {
                     double boundedDouble = 0.0;
                     for (int m = 0; m < 2; m++) {
-                        if (i < month.length / 3) {
+                        if (getYear(month[j]) < 2019) {
+                            if (i < 25 / 3) {
+                                boundedDouble = countRate1[0] + getRandom(j, Randomsflag[j]) * (countRate1[1] - countRate1[0]);
+                            } else if (i < (25 * 2) / 3) {
 
-                            randomIndex++;
+                                boundedDouble = countRate2[0] + getRandom(j, Randomsflag[j]) * (countRate2[1] - countRate2[0]);
 
-                            boundedDouble = countRate1[0] + getRandom(randomIndex) * (countRate1[1] - countRate1[0]);
-                        } else if (i < (month.length * 2) / 3) {
+                            } else {
 
-                            randomIndex++;
+                                boundedDouble = countRate3[0] + getRandom(j, Randomsflag[j]) * (countRate3[1] - countRate3[0]);
 
-                            boundedDouble = countRate2[0] + getRandom(randomIndex) * (countRate2[1] - countRate2[0]);
+                            }
                         } else {
+                            if (getMonth(month[j]) <= 4) {
+                                boundedDouble = countRate1[0] + getRandom(j, Randomsflag[j]) * (countRate1[1] - countRate1[0]);
 
-                            randomIndex++;
+                            } else if (getMonth(month[j]) <= 8) {
+                                boundedDouble = countRate2[0] + getRandom(j, Randomsflag[j]) * (countRate2[1] - countRate2[0]);
 
-                            boundedDouble = countRate3[0] + getRandom(randomIndex) * (countRate3[1] - countRate3[0]);
+                            } else {
+                                boundedDouble = countRate3[0] + getRandom(j, Randomsflag[j]) * (countRate3[1] - countRate3[0]);
+
+                            }
+
                         }
+
+
+                        Randomsflag[j]++;
+
+
+                        boundedDouble = countRate1[0] + getRandom(j, Randomsflag[j]) * (countRate1[1] - countRate1[0]);
 
                         orderNum[m][k][i][j] = (int) (peopleNum[m][k][i][j] * boundedDouble);
                     }
@@ -267,7 +290,7 @@ public class EcStatic {
         orderNum = getCount();
 
         for (int i = 0; i < month.length; i++) {
-            for (int j = 0; j < month.length; j++) {
+            for (int j = i; j < month.length; j++) {
                 int[] amountRateEc = {Integer.parseInt(parameters[j][12]), Integer.parseInt(parameters[j][13])};
                 int[] amountRateFa = {Integer.parseInt(parameters[j][14]), Integer.parseInt(parameters[j][15])};
 
@@ -276,18 +299,16 @@ public class EcStatic {
                     double boundedDoubleEc = 0.0;
                     double boundedDoubleFa = 0.0;
 
-                    randomIndex++;
 
-                    boundedDoubleEc = amountRateEc[0] + getRandom(randomIndex) * (amountRateEc[1] - amountRateEc[0]);
+                    boundedDoubleEc = amountRateEc[0] + getRandom(j, Randomsflag[j]) * (amountRateEc[1] - amountRateEc[0]);
 
-
+                    Randomsflag[j]++;
                     if (j >= 21) {
 
-                        randomIndex++;
+                        boundedDoubleFa = amountRateFa[0] + getRandom(j, Randomsflag[j]) * (amountRateFa[1] - amountRateFa[0]);
 
-                        boundedDoubleFa = amountRateFa[0] + getRandom(randomIndex) * (amountRateFa[1] - amountRateFa[0]);
                     }
-
+                    Randomsflag[j]++;
                     amountNum[0][k][i][j] = ((orderNum[0][k][i][j] * boundedDoubleEc) / 1000) * fixEcAmountPara;
                     //fix:2018年8月份之前增长太快
                     if (j > 14) {
@@ -317,7 +338,7 @@ public class EcStatic {
         } else {
             appAndWebOrderNum = new int[2][2][4][1000][1000];
         }
-        orderNum = getCount();
+        amountNum = getAmount();
         //电商，金融
         for (int i = 0; i < 2; i++) {
             //区域{"美国", "欧洲", "东南亚", "其他"}
@@ -330,11 +351,17 @@ public class EcStatic {
 
 
                         if (i == 0) {
-                            double websiteDoubleRate = websiteRate[0] + getRandom(randomIndex) * (websiteRate[1] - websiteRate[0]);
-                            randomIndex++;
+
+                            double websiteDoubleRate = websiteRate[0] + getRandom(m, Randomsflag[m]) * (websiteRate[1] - websiteRate[0]);
+                            //Randomsflag[m]++;
+
                             //网站
                             appAndWebOrderNum[i][0][n][k][m] = (int) (orderNum[i][n][k][m] * websiteDoubleRate);
                         }
+                        //else{
+                        //    Randomsflag[m]++;
+                        //
+                        //}
                         //app
                         appAndWebOrderNum[i][1][n][k][m] = orderNum[i][n][k][m] - appAndWebOrderNum[i][0][n][k][m];
 
@@ -354,7 +381,7 @@ public class EcStatic {
         } else {
             appAndWebAmountNum = new double[2][2][4][1000][1000];
         }
-        amountNum = getAmount();
+
         //电商，金融
         for (int i = 0; i < 2; i++) {
             //区域{"美国", "欧洲", "东南亚", "其他"}
@@ -366,11 +393,16 @@ public class EcStatic {
                         double[] websiteRate = {Double.parseDouble(parameters[m][18]), Double.parseDouble(parameters[m][19])};
 
                         if (i == 0) {
-                            double websiteDoubleRate = websiteRate[0] + getRandom(randomIndex) * (websiteRate[1] - websiteRate[0]);
-                            randomIndex++;
+
+                            double websiteDoubleRate = websiteRate[0] + getRandom(m, Randomsflag[m]) * (websiteRate[1] - websiteRate[0]);
+                            //Randomsflag[m]++;
                             //网站
                             appAndWebAmountNum[i][0][n][k][m] = (int) (amountNum[i][n][k][m] * websiteDoubleRate);
                         }
+                        //else{
+                        //    Randomsflag[m]++;
+                        //
+                        //}
                         //app
                         appAndWebAmountNum[i][1][n][k][m] = amountNum[i][n][k][m] - appAndWebAmountNum[i][0][n][k][m];
 
